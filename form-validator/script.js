@@ -18,10 +18,14 @@ function showSuccess(input){
 }
 
 
-function isValidEmail(email){
+function checkEmail(input){
   const reg = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-  return reg.test(String(email).toLowerCase());
+  if(reg.test(input.value.trim())){
+    showSuccess(input);
+  } else {
+    showError(input, 'Email is not valid ')
+  }
 }
 
 function checkRequired(inputArr){
@@ -29,9 +33,25 @@ function checkRequired(inputArr){
     if(input.value.trim()=== ''){
       showSuccess(input, `${getFieldName(input)} is required.`);
     } else {
-      showSuccess();
+      showSuccess(input);
     }
   })
+}
+
+function checkLength(input, min, max){
+  if(input.value.length < min){
+    showError(input, `${getFieldName(input)} must be at least ${min}`)
+  } else if (input.value.length > max){
+    showError(input, `${getFieldName(input)} must be at less than ${max}`)
+  } else {
+    showSuccess(input);
+  }
+}
+
+function matchPassword(input1, input2){
+  if(input1.value !== input2.value){
+    showError(input2, 'Password do not match.')
+  }
 }
 
 function getFieldName(input){
@@ -42,30 +62,13 @@ function getFieldName(input){
  * Using dynamic validation
  */
 form.addEventListener('submit', (e => {
-  e.preventDefault();
+  e.preventDefault(); 
 
-  if (username.value === '') {
-    showError(username, 'Username is required.')
-  } else {
-    showSuccess(username)
-  }
-  if (email.value === '') {
-    showError(email, 'Email is required.')
-  } else if (!isValidEmail(email.value)){
-    showError(email, 'Email is not valid.')
-  }else {
-    showSuccess(email)
-  }
-  if (password.value === '') {
-    showError(password, 'Password is required.')
-  } else {
-    showSuccess(password)
-  }
-  if (password2.value === '') {
-    showError(password2, 'Confirm password is required.')
-  } else {
-    showSuccess(password2)
-  }
+  checkRequired([username, email, password, password2]);
+  checkLength(username, 3, 15);
+  checkLength(password, 6, 20);
+  checkEmail(email);
+  matchPassword(password, password2);
 }))
 
 /**
