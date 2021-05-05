@@ -24,6 +24,23 @@ function isValidEmail(email){
   return reg.test(String(email).toLowerCase());
 }
 
+function checkRequired(inputArr){
+  inputArr.forEach(input =>{
+    if(input.value.trim()=== ''){
+      showSuccess(input, `${getFieldName(input)} is required.`);
+    } else {
+      showSuccess();
+    }
+  })
+}
+
+function getFieldName(input){
+  return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+}
+
+/**
+ * Using dynamic validation
+ */
 form.addEventListener('submit', (e => {
   e.preventDefault();
 
@@ -50,3 +67,33 @@ form.addEventListener('submit', (e => {
     showSuccess(password2)
   }
 }))
+
+/**
+ * Using simple validation
+ */
+// form.addEventListener('submit', (e => {
+//   e.preventDefault();
+
+//   if (username.value === '') {
+//     showError(username, 'Username is required.')
+//   } else {
+//     showSuccess(username)
+//   }
+//   if (email.value === '') {
+//     showError(email, 'Email is required.')
+//   } else if (!isValidEmail(email.value)){
+//     showError(email, 'Email is not valid.')
+//   }else {
+//     showSuccess(email)
+//   }
+//   if (password.value === '') {
+//     showError(password, 'Password is required.')
+//   } else {
+//     showSuccess(password)
+//   }
+//   if (password2.value === '') {
+//     showError(password2, 'Confirm password is required.')
+//   } else {
+//     showSuccess(password2)
+//   }
+// }))
